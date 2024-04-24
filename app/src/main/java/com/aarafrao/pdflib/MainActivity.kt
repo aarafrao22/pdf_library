@@ -19,6 +19,9 @@ import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -81,6 +84,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun generateTimestampString(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDateAndTime: String = sdf.format(Date())
+        return currentDateAndTime
+    }
+
     private fun convertBitmapToPdf() {
         // Create a new PdfDocument instance
         val pdfDocument = PdfDocument()
@@ -105,7 +114,8 @@ class MainActivity : AppCompatActivity() {
         // Save the PDF document
         val directory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val file = File(directory, "$fileName.pdf")
+        val timeString = generateTimestampString()
+        val file = File(directory, "$fileName-$timeString.pdf")
         try {
             val fileOutputStream = FileOutputStream(file)
             pdfDocument.writeTo(fileOutputStream)
